@@ -16,8 +16,6 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'django_extensions',
-    django-extensions==4.1,
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -26,7 +24,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'drf_spectacular',
-    'core', 
+    'core',
 ]
 
 MIDDLEWARE = [
