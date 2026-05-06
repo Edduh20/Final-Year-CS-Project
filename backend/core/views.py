@@ -11,7 +11,7 @@ from datetime import timedelta
 from decimal import Decimal
 from django.http import HttpResponse
 from PIL import Image
-import pytesseract, os
+import os
 from django.core.mail import send_mail
 import random
 import string

@@ -209,3 +209,5 @@ KENYA_COUNTIES = [
 ]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+OCR_API_KEY = config("OCR_API_KEY")

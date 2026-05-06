@@ -6,13 +6,13 @@ import requests
 from datetime import datetime
 from PIL import Image, ImageEnhance
 from decimal import Decimal
-import pytesseract
 import PyPDF2
 import io
 from django.conf import settings
 from django.utils import timezone
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from decouple import config
 
 from .models import Document, Notification, UserProfile, LandRecord, Transaction, OwnershipHistory
 
@@ -52,18 +52,35 @@ def preprocess_image(image):
     
     return image
 
+
 def extract_text_from_image(image_content):
-    """3. Extract text from image using Tesseract OCR"""
+    """3. Extract text from image using OCR API"""
     try:
-        image = Image.open(io.BytesIO(image_content))
-        
-        image = preprocess_image(image)
-        
-        text = pytesseract.image_to_string(image)
-        
+        import base64
+
+        # Convert image to base64
+        base64_image = base64.b64encode(image_content).decode('utf-8')
+
+        url = "https://api.ocr.space/parse/image"
+
+        payload = {
+            "base64Image": f"data:image/png;base64,{base64_image}",
+            "apikey": os.getenv("OCR_API_KEY"),  
+            "language": "eng"
+        }
+
+        response = requests.post(url, data=payload)
+        result = response.json()
+
+        if result.get("IsErroredOnProcessing"):
+            raise Exception(result.get("ErrorMessage"))
+
+        text = result["ParsedResults"][0]["ParsedText"]
+
         return text.strip()
+
     except Exception as e:
-        raise Exception("Failed to extract text from image")
+        raise Exception(f"OCR API failed: {str(e)}")
 
 def extract_structured_data(text):
     """4. Extract structured property data from OCR text"""
