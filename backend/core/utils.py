@@ -53,29 +53,39 @@ def preprocess_image(image):
     return image
 
 
+
 def extract_text_from_image(image_content):
     """3. Extract text from image using OCR API"""
     try:
         import base64
+        import os
+        import requests
 
-        # Convert image to base64
-        base64_image = base64.b64encode(image_content).decode('utf-8')
+        api_key = os.getenv("OCR_API_KEY")
+        if not api_key:
+            raise Exception("OCR_API_KEY is missing in environment variables")
+
+        base64_image = base64.b64encode(image_content).decode("utf-8")
 
         url = "https://api.ocr.space/parse/image"
 
         payload = {
-            "base64Image": f"data:image/png;base64,{base64_image}",
-            "apikey": os.getenv("OCR_API_KEY"),  
+            "base64Image": f"data:image/jpeg;base64,{base64_image}",
+            "apikey": api_key,
             "language": "eng"
         }
 
-        response = requests.post(url, data=payload)
+        response = requests.post(url, data=payload, timeout=15)
         result = response.json()
 
         if result.get("IsErroredOnProcessing"):
             raise Exception(result.get("ErrorMessage"))
 
-        text = result["ParsedResults"][0]["ParsedText"]
+        parsed_results = result.get("ParsedResults")
+        if not parsed_results:
+            raise Exception("No text found in image")
+
+        text = parsed_results[0].get("ParsedText", "")
 
         return text.strip()
 
