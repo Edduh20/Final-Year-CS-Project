@@ -17,6 +17,7 @@ PyJWT==2.12.1
 pypdf==6.10.2
 python-decouple==3.8
 PyYAML==6.0.3
+reportlab==4.4.4
 requests==2.32.3
 referencing==0.37.0
 rpds-py==0.30.0
