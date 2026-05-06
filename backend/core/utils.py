@@ -761,11 +761,11 @@ def get_valid_county(possible_county):
         if actual_county in possible_county or possible_county in actual_county:
             return actual_county
     
-    return 'nairobi'
+    return None
 
 def extract_county_from_parcel(parcel_number):
     if not parcel_number:
-        return 'nairobi'
+        return None
     
     parcel_upper = parcel_number.upper()
     
@@ -839,7 +839,7 @@ def extract_county_from_parcel(parcel_number):
                 valid_county = get_valid_county(county_patterns[county_abbr])
                 return valid_county
     
-    return 'nairobi'
+    return None
 
 # ==================== OTHER FUNCTIONS  ====================#
 
