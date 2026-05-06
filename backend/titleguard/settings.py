@@ -62,7 +62,7 @@ WSGI_APPLICATION = 'titleguard.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=config('DB_SSL_REQUIRE', default=False, cast=bool)
     )
 }
 
