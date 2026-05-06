@@ -21,7 +21,6 @@ import {
 
 import TransferModal from './TransferModal';
 
-const API_BASE_URL = "http://127.0.0.1:8000/api";
 
 // --- EDIT LAND RECORD MODAL ---
 const EditLandRecordModal = ({
@@ -232,10 +231,12 @@ const AddLandRecordModal = ({ onClose, onRecordAdded }) => {
         const formDataObj = new FormData();
         formDataObj.append("file", file);
 
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/land-records/bulk-upload/`, {
+        const API_URL = import.meta.env.VITE_API_URL;
+
+        const response = await fetch(`${API_URL}/land-records/bulk-upload/`, {
           method: "POST",
           headers: {
-            'Authorization': `Bearer ${api.getAccessToken()}`,
+            Authorization: `Bearer ${api.getAccessToken()}`,
           },
           body: formDataObj,
         });

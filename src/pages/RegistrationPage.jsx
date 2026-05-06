@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AlertCircle, FileCheck2, CheckCircle, Eye, EyeOff } from 'lucide-react';
+import { apiFetch } from "../lib/api";
 
 export default function RegistrationPage() {
   const navigate = useNavigate();
@@ -44,7 +45,9 @@ export default function RegistrationPage() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/register/', {
+      const API_URL = import.meta.env.VITE_API_URL;
+
+      const response = await fetch(`${API_URL}/auth/register/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

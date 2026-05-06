@@ -19,6 +19,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+const API_URL = import.meta.env.VITE_API_URL;
 export default function Layout({ children, currentPage }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [user, setUser] = useState(null);
@@ -32,7 +33,7 @@ export default function Layout({ children, currentPage }) {
   const fetchUser = async () => {
     try {
       const token = JSON.parse(localStorage.getItem("auth_tokens") || "{}").access;
-      const response = await fetch("http://localhost:8000/api/auth/me/", {
+      const response = await fetch(`${API_URL}/auth/me/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
@@ -47,10 +48,9 @@ export default function Layout({ children, currentPage }) {
   const fetchUnreadNotifications = async () => {
     try {
       const token = JSON.parse(localStorage.getItem("auth_tokens") || "{}").access;
-      const response = await fetch(
-        "http://localhost:8000/api/notifications/unread_count/",
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await fetch(`${API_URL}/notifications/unread_count/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (response.ok) {
         const data = await response.json();
         setUnreadCount(data.unread_count || 0);
@@ -67,7 +67,7 @@ export default function Layout({ children, currentPage }) {
   const handleSignOut = async () => {
     try {
       const token = JSON.parse(localStorage.getItem("auth_tokens") || "{}").access;
-      await fetch("http://localhost:8000/api/auth/logout/", {
+      await fetch(`${API_URL}/auth/logout/`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
