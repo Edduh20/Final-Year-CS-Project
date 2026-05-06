@@ -18,6 +18,7 @@ pypdf==6.10.2
 pytesseract==0.3.13
 python-decouple==3.8
 PyYAML==6.0.3
+requests==2.32.3
 referencing==0.37.0
 rpds-py==0.30.0
 sqlparse==0.5.5
