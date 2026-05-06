@@ -23,13 +23,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
     first_login_completed = serializers.BooleanField(source='user_first_login_completed', read_only=True)
     created_at = serializers.DateTimeField(source='user_created_at', read_only=True)
     updated_at = serializers.DateTimeField(source='user_updated_at', read_only=True)
+    current_password = serializers.CharField(write_only=True, required=False)
+    new_password = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = UserProfile
         fields = [
             'id', 'email', 'password', 'role', 'full_name', 'phone_number',
             'id_number', 'county', 'is_active', 'email_verified', 'first_login_completed',
-            'created_at', 'updated_at'
+            'created_at', 'updated_at', 'current_password', 'new_password'
         ]
         extra_kwargs = {'password': {'write_only': True}}
 
@@ -50,14 +52,27 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-    
-        password = validated_data.pop('password', None)
-        if password:
-            instance.set_password(password)
-    
+        current_password = validated_data.pop('current_password', None)
+        new_password = validated_data.pop('new_password', None)
+
+        # 🔐 Handle password change properly
+        if new_password:
+            if not current_password:
+                raise serializers.ValidationError({
+                    "current_password": "Current password is required"
+                })
+
+            if not instance.check_password(current_password):
+                raise serializers.ValidationError({
+                    "current_password": "Incorrect password"
+                })
+
+            instance.set_password(new_password)
+
+        # Update other fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-    
+
         instance.save()
         return instance
 
