@@ -179,6 +179,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         import requests as http_requests
         brevo_api_key = config('BREVO_API_KEY', default='').strip()
         print(f"DEBUG API KEY: {brevo_api_key[:10]}...")
+        print(f"DEBUG KEY LENGTH: {len(brevo_api_key)}")
+        print(f"DEBUG KEY: {brevo_api_key}")
 
         if brevo_api_key:
             try:
