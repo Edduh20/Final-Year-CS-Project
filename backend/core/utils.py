@@ -252,6 +252,11 @@ def clean_extracted_data(data):
             elif key == 'deed_number':
                 value = value.upper().replace(' ', '')
                 print(f"DEBUG: Raw deed number: {value}")
+                
+                # Fix missing slash after TD prefix
+                if value.startswith('TD') and not value.startswith('TD/'):
+                    value = 'TD/' + value[2:]
+                
                 cleaned_data[key] = value
                 print(f"DEBUG: Cleaned deed number: {cleaned_data.get(key)}")
                 
