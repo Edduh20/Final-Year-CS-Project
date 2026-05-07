@@ -19,7 +19,7 @@ export default function TransferModal({ landRecord, onClose, onSuccess }) {
 
   const transferFees = {
     legal_officer:400, 
-    land_officer: 1000,  
+    land_officer: 600,  
   };
   const totalTransferFee = transferFees.legal_officer + transferFees.land_officer;
 
