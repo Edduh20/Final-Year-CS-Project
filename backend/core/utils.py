@@ -179,16 +179,15 @@ def correct_ocr_letter_errors(text):
     
 
     corrections = {
-        'V': 'I',    
-        'W': 'U',    
-        'VV': 'W',   
-        'II': 'U',  
-        '0': 'O',   
-        '1': 'I',   
-        '5': 'S',   
-        '8': 'B',    
-        'G': '6',    
-        '6': 'G',    
+    'V': 'I',    
+    'W': 'U',    
+    'VV': 'W',   
+    'II': 'U',  
+    '0': 'O',   
+    '1': 'I',
+    'L': 'I',   
+    '5': 'S',   
+    '8': 'B',    
     }
     
     result = text.upper()
@@ -253,28 +252,7 @@ def clean_extracted_data(data):
             elif key == 'deed_number':
                 value = value.upper().replace(' ', '')
                 print(f"DEBUG: Raw deed number: {value}")
-                
-
-                if '/' in value:
-                    parts = value.split('/')
-                    if len(parts) >= 2:
-
-                        corrected_county = correct_ocr_letter_errors(parts[1])
-                        parts[1] = corrected_county
-                        value = '/'.join(parts)
-                
-
-                if '/' in value:
-                    parts = value.split('/')
-                    if len(parts) >= 2:
-                        county = normalize_county_name(parts[1])
-                        parts[1] = county
-                        cleaned_data[key] = '/'.join(parts)
-                    else:
-                        cleaned_data[key] = value
-                else:
-                    cleaned_data[key] = value
-                
+                cleaned_data[key] = value
                 print(f"DEBUG: Cleaned deed number: {cleaned_data.get(key)}")
                 
             elif key == 'owner_full_name':
