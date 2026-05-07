@@ -420,6 +420,9 @@ def normalize_county_name(county_text):
     
     normalized = get_valid_county(county_lower)
     
+    if normalized is None:
+        return county_text
+    
 
     return normalized.upper()
 
