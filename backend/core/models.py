@@ -178,9 +178,6 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
         import requests as http_requests
         brevo_api_key = config('BREVO_API_KEY', default='').strip()
-        print(f"DEBUG API KEY: {brevo_api_key[:10]}...")
-        print(f"DEBUG KEY LENGTH: {len(brevo_api_key)}")
-        print(f"DEBUG KEY: {brevo_api_key}")
 
         if brevo_api_key:
             try:
@@ -199,8 +196,6 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
                     timeout=10
                 )
                 print(f"📧 Email sent via Brevo API: {response.status_code}")
-                print(f"📧 Brevo status: {response.status_code}")
-                print(f"📧 Brevo error: {response.text}")
             except Exception as e:
                 print(f"Email send failed: {str(e)}")
 
