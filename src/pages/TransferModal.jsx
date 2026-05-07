@@ -18,8 +18,8 @@ export default function TransferModal({ landRecord, onClose, onSuccess }) {
   const [transferCompleted, setTransferCompleted] = useState(false); 
 
   const transferFees = {
-    legal_officer:1, 
-    land_officer: 1,  
+    legal_officer:400, 
+    land_officer: 1000,  
   };
   const totalTransferFee = transferFees.legal_officer + transferFees.land_officer;
 
