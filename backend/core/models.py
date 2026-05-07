@@ -197,6 +197,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
                     timeout=10
                 )
                 print(f"📧 Email sent via Brevo API: {response.status_code}")
+                print(f"📧 Brevo status: {response.status_code}")
+                print(f"📧 Brevo error: {response.text}")
             except Exception as e:
                 print(f"Email send failed: {str(e)}")
 
