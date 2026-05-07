@@ -257,6 +257,16 @@ def clean_extracted_data(data):
                 if value.startswith('TD') and not value.startswith('TD/'):
                     value = 'TD/' + value[2:]
                 
+                # Normalize county in deed number
+                if '/' in value:
+                    parts = value.split('/')
+                    if len(parts) >= 2:
+                        corrected_county = correct_ocr_letter_errors(parts[1])
+                        normalized = normalize_county_name(corrected_county)
+                        if normalized:
+                            parts[1] = normalized
+                        value = '/'.join(parts)
+                
                 cleaned_data[key] = value
                 print(f"DEBUG: Cleaned deed number: {cleaned_data.get(key)}")
                 
