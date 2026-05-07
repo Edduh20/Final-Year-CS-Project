@@ -7,6 +7,7 @@ import secrets
 from datetime import timedelta
 from django.utils import timezone
 import os
+import socket
 
 def default_acceptance_expiry():
     return timezone.now() + timedelta(days=7)
@@ -182,10 +183,13 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
             to=[self.user_email],  # 🔥 FIXED HERE
         )
 
+        socket.setdefaulttimeout(10)  # 10 second timeout
         try:
             email.send()
         except Exception as e:
             print(f"Email send failed: {str(e)}")
+        finally:
+            socket.setdefaulttimeout(None)
 
 
         print(f"📧 OTP sent to {self.user_email}")
