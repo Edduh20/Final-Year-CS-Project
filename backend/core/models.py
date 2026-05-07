@@ -182,7 +182,11 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
             to=[self.user_email],  # 🔥 FIXED HERE
         )
 
-        email.send()
+        try:
+            email.send()
+        except Exception as e:
+            print(f"Email send failed: {str(e)}")
+
 
         print(f"📧 OTP sent to {self.user_email}")
         
