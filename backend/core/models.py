@@ -149,6 +149,9 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         self.save()
 
         from django.utils.timezone import localtime
+        from decouple import config
+
+        frontend_url = config("FRONTEND_URL")
 
         subject = f'TitleGuard - OTP Verification for {self.user_full_name}'
 
@@ -165,7 +168,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         {password_section}
         
         Verification Link:
-        http://localhost:5173/verify-otp
+        {frontend_url}/verify-otp
 
         ⚠️ OTP expires in 10 minutes
 
@@ -175,7 +178,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         email = EmailMessage(
             subject=subject,
             body=message,
-            from_email="TitleGuard <noreply@titleguard.com>",
+            from_email=settings.DEFAULT_FROM_EMAIL,
             to=[self.user_email],  # 🔥 FIXED HERE
         )
 
