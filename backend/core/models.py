@@ -176,23 +176,30 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         Timestamp: {localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S")}
         """
 
-        email = EmailMessage(
-            subject=subject,
-            body=message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[self.user_email],  # 🔥 FIXED HERE
-        )
+        import requests as http_requests
+        brevo_api_key = config('BREVO_API_KEY', default='')
 
-        socket.setdefaulttimeout(10)  # 10 second timeout
-        try:
-            email.send()
-        except Exception as e:
-            print(f"Email send failed: {str(e)}")
-        finally:
-            socket.setdefaulttimeout(None)
+        if brevo_api_key:
+            try:
+                response = http_requests.post(
+                    'https://api.brevo.com/v3/smtp/email',
+                    headers={
+                        'api-key': brevo_api_key,
+                        'Content-Type': 'application/json'
+                    },
+                    json={
+                        'sender': {'email': settings.DEFAULT_FROM_EMAIL},
+                        'to': [{'email': self.user_email}],
+                        'subject': subject,
+                        'textContent': message
+                    },
+                    timeout=10
+                )
+                print(f"📧 Email sent via Brevo API: {response.status_code}")
+            except Exception as e:
+                print(f"Email send failed: {str(e)}")
 
-
-        print(f"📧 OTP sent to {self.user_email}")
+        
         
         
     def verify_otp(self, otp):
